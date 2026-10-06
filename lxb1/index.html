@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>20 câu lý thuyết lái xe</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4f7f5;
+      --card: #fff;
+      --ink: #1c2b24;
+      --muted: #5d6b64;
+      --line: #d7e2db;
+      --green: #1f7a4d;
+      --green-soft: #e7f6ee;
+      --red: #b42318;
+      --red-soft: #fdecea;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+    }
+    main { max-width: 860px; margin: 0 auto; padding: 24px 16px 48px; }
+    h1 { margin: 0 0 8px; font-size: 28px; }
+    .lead { margin: 0 0 18px; color: var(--muted); }
+    .sets { display: flex; gap: 8px; margin-bottom: 16px; }
+    .sets button, .actions button {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 999px;
+      padding: 8px 14px;
+      cursor: pointer;
+      font: inherit;
+    }
+    .sets button.active { background: var(--green); color: #fff; border-color: var(--green); }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .q { font-weight: 650; margin-bottom: 10px; }
+    label {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 8px;
+      border-radius: 10px;
+    }
+    label.correct { background: var(--green-soft); }
+    label.wrong { background: var(--red-soft); }
+    .actions { display: flex; gap: 8px; align-items: center; margin-top: 8px; }
+    .actions button.primary { background: var(--green); color: #fff; border-color: var(--green); }
+    .score { font-weight: 650; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>20 câu lý thuyết lái xe</h1>
+    <p class="lead">20 câu đầu của bộ 600 câu sát hạch. Chia thành 2 bộ, mỗi bộ 10 câu.</p>
+    <div class="sets" id="sets"></div>
+    <form id="quiz"></form>
+    <div class="actions">
+      <button class="primary" type="button" id="submit">Nộp bài</button>
+      <button type="button" id="reset">Làm lại</button>
+      <span class="score" id="score"></span>
+    </div>
+  </main>
+  <script>
+    const sets = [
+      {
+        title: "Bộ 1 · Câu 1–10",
+        questions: [
+          { n: 1, q: "Phần của đường bộ được sử dụng cho phương tiện giao thông đường bộ đi lại là gì?", options: ["Phần mặt đường và lề đường.", "Phần đường xe chạy.", "Phần đường xe cơ giới."], answer: 1 },
+          { n: 2, q: "Làn đường là gì?", options: ["Là một phần của phần đường xe chạy được chia theo chiều dọc của đường, sử dụng cho xe chạy.", "Là một phần của phần đường xe chạy được chia theo chiều dọc của đường, có đủ chiều rộng cho xe chạy an toàn.", "Là đường cho xe ô tô chạy, dừng, đỗ an toàn."], answer: 1 },
+          { n: 3, q: "Khổ giới hạn của đường bộ được hiểu như thế nào là đúng?", options: ["Khổ giới hạn của đường bộ là khoảng trống có kích thước giới hạn về chiều rộng, chiều cao của đường bộ để các xe, bao gồm cả hàng hóa xếp trên xe đi qua được an toàn và được xác định theo quy chuẩn, tiêu chuẩn kỹ thuật của đường bộ.", "Là khoảng trống có kích thước giới hạn về chiều rộng của đường, cầu, bến phà, hầm trên đường bộ để các xe kể cả hàng hóa xếp trên xe đi qua được an toàn.", "Là khoảng trống có kích thước giới hạn về chiều cao của cầu, bến phà, hầm trên đường bộ để các xe đi qua được an toàn."], answer: 0 },
+          { n: 4, q: "Dải phân cách được lắp đặt để làm gì?", options: ["Để phân chia các làn đường dành cho xe cơ giới và xe thô sơ trên đường cao tốc.", "Để phân chia phần đường xe chạy thành hai chiều riêng biệt hoặc để phân chia phần đường dành cho xe cơ giới và xe thô sơ hoặc của nhiều loại xe khác nhau trên cùng một chiều đường.", "Để phân tách phần đường xe chạy và hành lang an toàn giao thông."], answer: 1 },
+          { n: 5, q: "Vạch kẻ đường là gì?", options: ["Là báo hiệu đường bộ để hỗ trợ cảnh báo nguy hiểm cho người tham gia giao thông đường bộ.", "Là vạch chỉ sự phân chia làn đường, vị trí hoặc hướng đi, vị trí dừng lại.", "Là báo hiệu cho người tham gia giao thông đường bộ về các thông tin của đường bộ.", "Cả ba ý trên."], answer: 1 },
+          { n: 6, q: "Người điều khiển phương tiện tham gia giao thông đường bộ được hiểu như thế nào là đúng?", options: ["Là người điều khiển xe cơ giới, người điều khiển xe thô sơ, người điều khiển xe máy chuyên dùng.", "Là người được giao nhiệm vụ hướng dẫn giao thông trên đường bộ.", "Cả hai ý trên."], answer: 0 },
+          { n: 7, q: "Người lái xe được hiểu như thế nào là đúng?", options: ["Là người điều khiển xe cơ giới.", "Là người điều khiển xe thô sơ.", "Là người điều khiển xe máy chuyên dùng."], answer: 0 },
+          { n: 8, q: "Trong nhóm các phương tiện giao thông đường bộ dưới đây, nhóm phương tiện nào là xe cơ giới?", options: ["Xe ô tô; máy kéo; xe mô tô hai bánh; xe mô tô ba bánh; xe gắn máy; xe cơ giới dùng cho người khuyết tật và xe máy chuyên dùng; xe đạp, xe đạp máy, xe đạp điện.", "Xe ô tô; rơ moóc được kéo bởi xe ô tô; sơ mi rơ moóc được kéo bởi ô tô đầu kéo; xe chở người bốn bánh có gắn động cơ; xe chở hàng bốn bánh có gắn động cơ; xe mô tô, xe gắn máy và các loại xe tương tự."], answer: 1 },
+          { n: 9, q: "Trong nhóm các phương tiện giao thông đường bộ dưới đây, nhóm phương tiện nào là xe thô sơ?", options: ["Xe đạp, xe đạp máy, xe đạp điện; xe xích lô; xe lăn dùng cho người khuyết tật; xe vật nuôi kéo và các loại xe tương tự.", "Xe đạp (kể cả xe đạp máy, xe đạp điện), xe gắn máy, xe cơ giới dùng cho người khuyết tật và xe máy chuyên dùng.", "Xe ô tô, máy kéo, rơ moóc hoặc sơ mi rơ moóc được kéo bởi xe ô tô, máy kéo."], answer: 0 },
+          { n: 10, q: "Phương tiện giao thông đường bộ gồm những loại nào?", options: ["Phương tiện giao thông cơ giới đường bộ.", "Phương tiện giao thông thô sơ đường bộ, xe máy chuyên dùng và các loại xe tương tự.", "Cả hai ý trên."], answer: 2 }
+        ]
+      },
+      {
+        title: "Bộ 2 · Câu 11–20",
+        questions: [
+          { n: 11, q: "Người tham gia giao thông đường bộ gồm những đối tượng nào?", options: ["Người điều khiển, người được chở trên phương tiện tham gia giao thông đường bộ.", "Người điều khiển, dẫn dắt vật nuôi trên đường bộ; người đi bộ trên đường bộ.", "Cả hai ý trên."], answer: 2 },
+          { n: 12, q: "Người điều khiển phương tiện tham gia giao thông đường bộ gồm những đối tượng nào dưới đây?", options: ["Người điều khiển xe cơ giới, người điều khiển xe thô sơ.", "Người điều khiển xe máy chuyên dùng.", "Cả hai ý trên."], answer: 2 },
+          { n: 13, q: "Người điều khiển giao thông đường bộ được hiểu như thế nào là đúng?", options: ["Là người điều khiển phương tiện tham gia giao thông đường bộ.", "Là Cảnh sát giao thông và người được giao nhiệm vụ hướng dẫn giao thông trên đường bộ.", "Là người tham gia giao thông đường bộ."], answer: 1 },
+          { n: 14, q: "Dừng xe được hiểu như thế nào là đúng?", options: ["Là trạng thái đứng yên của xe không giới hạn thời gian để cho người lên, xuống xe, xếp dỡ hàng hóa hoặc thực hiện công việc khác.", "Là trạng thái đứng yên tạm thời của xe trong một khoảng thời gian cần thiết đủ để cho người lên xe, xuống xe, xếp dỡ hàng hóa, kiểm tra kỹ thuật xe hoặc hoạt động khác. Khi dừng xe không được tắt máy và không được rời khỏi vị trí lái, trừ trường hợp rời khỏi vị trí lái để đóng, mở cửa xe, xếp dỡ hàng hóa, kiểm tra kỹ thuật xe nhưng phải sử dụng phanh đỗ xe hoặc thực hiện biện pháp an toàn khác.", "Là trạng thái đứng yên của xe không giới hạn thời gian giữa 02 lần vận chuyển hàng hóa hoặc hành khách."], answer: 1 },
+          { n: 15, q: "Đỗ xe được hiểu như thế nào là đúng?", options: ["Là trạng thái đứng yên của xe có giới hạn thời gian trong một khoảng thời gian cần thiết đủ để cho người lên, xuống xe đó, xếp dỡ hàng hóa hoặc thực hiện công việc khác.", "Là trạng thái đứng yên của xe không giới hạn thời gian. Khi đỗ xe, người điều khiển phương tiện tham gia giao thông đường bộ chỉ được rời khỏi xe khi đã sử dụng phanh đỗ xe hoặc thực hiện biện pháp an toàn khác. Xe đỗ trên đoạn đường dốc phải đánh lái về phía lề đường, chèn bánh."], answer: 1 },
+          { n: 16, q: "Đường cao tốc được hiểu như thế nào là đúng?", options: ["Là một cấp kỹ thuật của đường bộ, chỉ dành cho một số loại xe cơ giới, xe máy chuyên dùng tham gia giao thông theo quy định của pháp luật. Có dải phân cách phân chia hai chiều xe chạy riêng biệt, không giao nhau cùng mức với một hoặc các đường khác, chỉ cho xe ra, vào ở những điểm nhất định. Có hàng rào bảo vệ, trang thiết bị phục vụ, bảo đảm giao thông liên tục, an toàn, rút ngắn thời gian hành trình.", "Là đường nối liền Thủ đô Hà Nội với trung tâm hành chính cấp tỉnh; đường nối liền các trung tâm hành chính cấp tỉnh; đường có vị trí quan trọng đối với sự phát triển kinh tế - xã hội, bảo đảm quốc phòng, an ninh của vùng, khu vực."], answer: 0 },
+          { n: 17, q: "Thiết bị an toàn cho trẻ em được hiểu như thế nào là đúng?", options: ["Là thiết bị có đủ khả năng bảo đảm an toàn cho trẻ em ở tư thế ngồi hoặc nằm trên xe ô tô, được thiết kế để giảm nguy cơ chấn thương cho người dùng trong trường hợp xảy ra va chạm hoặc xe ô tô giảm tốc độ đột ngột, bằng cách hạn chế sự di chuyển của cơ thể trẻ em.", "Là thiết bị có đủ khả năng bảo đảm an toàn cho trẻ em ở tư thế đứng hoặc nằm trên xe ô tô, được thiết kế để giảm nguy cơ chấn thương cho người dùng trong trường hợp xe ô tô lưu thông bình thường."], answer: 0 },
+          { n: 18, q: "Theo chức năng phục vụ thì đường bộ được phân loại như thế nào?", options: ["Đường chính, đường nhánh, đường gom, đường bên, đường dành cho giao thông công cộng, đường nội bộ, đường dành riêng cho người đi bộ, người đi xe đạp và các đường khác.", "Đường chính, đường nhánh, đường gom, đường dành cho giao thông công cộng, đường nội bộ, đường dành riêng cho người đi bộ, người đi xe đạp và các đường khác.", "Đường chính, đường nhánh, đường gom, đường bên, đường dành cho giao thông công cộng, đường dành riêng cho người đi bộ, người đi xe đạp và các đường khác."], answer: 0 },
+          { n: 19, q: "Hành vi nào dưới đây bị nghiêm cấm?", options: ["Sử dụng xe đạp đi trên các tuyến quốc lộ.", "Rải vật sắc nhọn, đổ chất gây trơn trượt trên đường bộ.", "Cả hai ý trên."], answer: 1 },
+          { n: 20, q: "Hành vi đưa xe cơ giới, xe máy chuyên dùng tham gia giao thông đường bộ nào dưới đây bị cấm?", options: ["Không có chứng nhận kiểm định an toàn kỹ thuật và bảo vệ môi trường.", "Hết niên hạn sử dụng.", "Cả hai ý trên."], answer: 2 }
+        ]
+      }
+    ];
+
+    let current = 0;
+    const setsEl = document.querySelector("#sets");
+    const quizEl = document.querySelector("#quiz");
+    const scoreEl = document.querySelector("#score");
+
+    function renderTabs() {
+      setsEl.innerHTML = sets.map((set, index) =>
+        `<button type="button" class="${index === current ? "active" : ""}" data-set="${index}">${set.title}</button>`
+      ).join("");
+    }
+
+    function renderQuiz() {
+      const set = sets[current];
+      quizEl.innerHTML = set.questions.map((item) => `
+        <article class="card">
+          <div class="q">Câu ${item.n}. ${item.q}</div>
+          ${item.options.map((option, index) => `
+            <label>
+              <input type="radio" name="q${item.n}" value="${index}" />
+              <span>${index + 1}. ${option}</span>
+            </label>
+          `).join("")}
+        </article>
+      `).join("");
+      scoreEl.textContent = "";
+    }
+
+    setsEl.addEventListener("click", (event) => {
+      const button = event.target.closest("button");
+      if (!button) return;
+      current = Number(button.dataset.set);
+      renderTabs();
+      renderQuiz();
+    });
+
+    document.querySelector("#submit").addEventListener("click", () => {
+      const questions = sets[current].questions;
+      let correct = 0;
+      questions.forEach((item) => {
+        const chosen = quizEl.querySelector(`input[name="q${item.n}"]:checked`);
+        const labels = [...quizEl.querySelectorAll(`input[name="q${item.n}"]`)].map((input) => input.closest("label"));
+        labels.forEach((label) => label.classList.remove("correct", "wrong"));
+        labels[item.answer].classList.add("correct");
+        if (chosen && Number(chosen.value) === item.answer) correct += 1;
+        else if (chosen) chosen.closest("label").classList.add("wrong");
+      });
+      scoreEl.textContent = `${correct}/${questions.length} câu đúng`;
+    });
+
+    document.querySelector("#reset").addEventListener("click", renderQuiz);
+
+    renderTabs();
+    renderQuiz();
+  </script>
+</body>
+</html>
